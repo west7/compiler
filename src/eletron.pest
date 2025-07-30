@@ -1,0 +1,12 @@
+WHITESPACE = _{ " " | "\t" }
+program = { expr ~ ("\n" ~ expr)* }
+expr = { number ~ (op ~ number)* }
+op = {
+      "+"
+    | "-"
+    | "*"
+    | "/"
+}
+number =  { ASCII_DIGIT+ }
+
+
