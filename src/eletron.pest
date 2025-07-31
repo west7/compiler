@@ -1,12 +1,47 @@
 WHITESPACE = _{ " " | "\t" }
-program = { expr ~ ("\n" ~ expr)* }
-expr = { number ~ (op ~ number)* }
-op = {
-      "+"
-    | "-"
-    | "*"
-    | "/"
-}
-number =  { ASCII_DIGIT+ }
+COMMENT = _{ "//" ~ ( !"\n" ~ ANY )* ~ ( "\n" | EOI ) }
 
+/* program = { SOI ~ stmt+ ~ EOI }
+
+stmt = _{ let_stmt | fn_def | expr_stmt }
+let_stmt = { "let" ~ ident ~ ("=" ~ expr)? ~ ";" }
+fn_def = { "fn" ~ ident ~ ident* ~ "=" ~ expr_block }
+expr_stmt = { expr ~ ";" }
+
+expr_block = { expr | "{" ~ stmt* ~ expr ~ "}" }
+expr = { infix_expr }
+infix_expr = { term ~ (op ~ term)* }
+term = _{ number | ident | fn_call | "(" ~ expr ~ ")" }
+
+fn_call = { ident ~ term* }
+op = { "+" | "-" | "*" | "/" | "**" | "^" }
+
+ident = @{ ( ASCII_ALPHA | "_" ) ~ ( ASCII_ALPHANUMERIC | "_" )* }
+number = @{ ASCII_DIGIT+ } */
+
+program = { SOI ~ sum_expr? ~ (NEWLINE ~ sum_expr?)* ~ EOI }
+
+sum_expr = { mul_expr ~ (sum_op ~ mul_expr)* }
+mul_expr = { pow_expr ~ (mul_op ~ pow_expr)* }
+pow_expr = { factor ~ (pow_op ~ factor)* }
+
+factor = { number | "(" ~ sum_expr ~ ")" }
+
+sum_op = { "+" | "-" }
+mul_op = { "*" | "/" }
+pow_op = { "**" }
+
+number =  @{ "-"? ~ ASCII_DIGIT+ }
+
+/* 
+let x = 5;
+let y = 3;
+ 
+fn add a b = a + b
+
+fn main = {
+    let z = add x y;
+    print(z)
+}
+*/
 
