@@ -17,7 +17,8 @@ fn main() {
             for pair in inner_pairs {
                 match &pair.as_rule() {
                     Rule::sum_expr => {
-                        print!("{} ", pair.as_str());
+                        let expr = pair.as_str().split("//").next().unwrap_or("").trim();
+                        print!("{} ", expr);
                         let result = eval_sum_expr(pair);
                         println!("= {}", result);
                     }   
