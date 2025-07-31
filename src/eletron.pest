@@ -5,8 +5,8 @@ COMMENT = _{ "//" ~ ( !NEWLINE ~ ANY )* | "/*" ~ ( !"*/" ~ ANY )* ~ "*/" }
 
 stmt = _{ let_stmt | fn_def | expr_stmt }
 let_stmt = { "let" ~ ident ~ ("=" ~ expr)? ~ ";" }
-fn_def = { "fn" ~ ident ~ ident* ~ "=" ~ expr_block }
-expr_stmt = { expr ~ ";" }
+fn_def = { "fn" ~ ident ~ "(" ~ ident* ~ ")" ~ "=" ~ expr_block }
+expr_stmt = { expr ~ ";" }?
 
 expr_block = { expr | "{" ~ stmt* ~ expr ~ "}" }
 expr = { infix_expr }
@@ -19,19 +19,31 @@ op = { "+" | "-" | "*" | "/" | "**" | "^" }
 ident = @{ ( ASCII_ALPHA | "_" ) ~ ( ASCII_ALPHANUMERIC | "_" )* }
 number = @{ ASCII_DIGIT+ } */
 
-program = { SOI ~ sum_expr? ~ (NEWLINE ~ sum_expr?)* ~ EOI }
+program = { SOI ~ stmt? ~ (NEWLINE ~ stmt?)* ~ EOI }
+
+stmt = { let_stmt | expr }
+
+let_stmt = { kw_let ~ ident ~ ("=" ~ expr) ~ ";" }
+expr = { sum_expr }
 
 sum_expr = { mul_expr ~ (sum_op ~ mul_expr)* }
 mul_expr = { pow_expr ~ (mul_op ~ pow_expr)* }
 pow_expr = { factor ~ (pow_op ~ factor)* }
 
-factor = { number | "(" ~ sum_expr ~ ")" }
+factor = { ident | number | "(" ~ sum_expr ~ ")" }
 
 sum_op = { "+" | "-" }
 mul_op = { "*" | "/" }
 pow_op = { "**" }
 
 number =  @{ "-"? ~ ASCII_DIGIT+ }
+ident  =  @{ (ASCII_ALPHA | "_") ~ (ASCII_ALPHANUMERIC | "_")* }
+
+//+Lexical::Keywords
+
+kw_let  = @{ "let"  }
+kw_if   = @{ "if"   }
+kw_else = @{ "else" }
 
 /* 
 let x = 5;
@@ -39,9 +51,9 @@ let y = 3;
  
 fn add a b = a + b
 
-fn main = {
-    let z = add x y;
-    print(z)
-}
+fn main =
+  let z = add x y;
+  print z
+
 */
 

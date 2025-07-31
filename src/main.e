@@ -1,6 +1,9 @@
-(1 + 2) * 3        //Comment
-/* TESTE
-acunakcn
-ackjnak
-*/
+(1 + 2) * 3
 1 * (-10) / 5 - 2
+2 ** 5 / 4
+
+let a = 10;
+let b = 20;
+
+a 
+a + b

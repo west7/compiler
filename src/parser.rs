@@ -5,7 +5,7 @@ use pest_derive::Parser;
 #[grammar = "eletron.pest"]
 pub struct EletronParser;
 
-
+/* 
 pub fn eval_expr(pair: Pair<Rule>, nl_fn: impl Fn(Pair<Rule>) -> f64) -> f64 {
     let mut inner = pair.into_inner();
     let mut acc = nl_fn(inner.next().unwrap());
@@ -55,3 +55,4 @@ pub fn eval_factor_expr(pair: Pair<Rule>) -> f64 {
         _ => unreachable!(),
     }
 }
+ */
